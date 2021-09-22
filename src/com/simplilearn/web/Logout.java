@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 @WebServlet("/logout")
@@ -25,10 +26,10 @@ public class Logout extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
-		//cookie based logout
-		Cookie ck = new Cookie("useremail", "");
-		ck.setMaxAge(0);
-		response.addCookie(ck);
+		//http session logout
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+		
 		out.println("<h3 style='color:green'>sucessfull logout </h3>");
 	}
 

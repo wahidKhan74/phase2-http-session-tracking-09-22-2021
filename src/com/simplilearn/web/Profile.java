@@ -2,6 +2,7 @@ package com.simplilearn.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/profile")
 public class Profile extends HttpServlet {
@@ -22,12 +24,15 @@ public class Profile extends HttpServlet {
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		// read coockies
-		Cookie[] cks = request.getCookies();
-		if(cks != null) {
-			String useremail = cks[0].getValue();
+		// read http session 
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			String useremail = (String) session.getAttribute("useremail");
+			UUID token = (UUID) session.getAttribute("token");
+			
 			if(useremail.equals("admin@gmail.com")) {
 				out.println("<h3 style='color:green'> Welcome to user profile '"+useremail+"' </h3>");
+				out.println("<p> "+token+"</p>");
 			} else {
 				out.println("<h3 style='color:red'>Login Failed * Invalid credntials </h3>");
 			}

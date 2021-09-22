@@ -2,6 +2,7 @@ package com.simplilearn.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 @WebServlet("/login")
@@ -35,11 +37,13 @@ public class Login extends HttpServlet {
 		
 		if(useremail !=null && !useremail.equals("") && !password.equals("")) {
 			if(useremail.equals("admin@gmail.com") && password.equals("admin@123")) {
-				// login success then create cookie
-				//create cookie
-				Cookie ck = new Cookie("useremail", useremail);
-				// add cookie in response
-				response.addCookie(ck);
+				
+				// login success then create http  session
+				HttpSession session = request.getSession(true);
+				//set session attribute
+				session.setAttribute("useremail", useremail);
+				session.setAttribute("token", UUID.randomUUID());
+				
 				out.println("<h3 style='color:green'>Login sucessfull ! for user '" + useremail + "' </h3>");
 			} else {
 				out.println("<h3 style='color:red'>Login Failed * Invalid credntials </h3>");
